@@ -8,8 +8,10 @@ const Store = createContext(initialState)
 
 
 const Form = () => {
+ 
   const formRef = useRef(null);
   const { dispatch, state: { todo } } = useContext(Store);
+  
   const item = todo.item;
   const [state, setState] = useState(item);
 
@@ -79,6 +81,7 @@ const Form = () => {
 
 
 const List = () => {
+  
   const { dispatch, state: { todo } } = useContext(Store);
   const currentList = todo.list;
 
@@ -153,6 +156,7 @@ const List = () => {
 
 function reducer(state, action) {
   switch (action.type) {
+    
     case 'update-item':
       const todoUpItem = state.todo;
       const listUpdateEdit = todoUpItem.list.map((item) => {
@@ -164,6 +168,7 @@ function reducer(state, action) {
       todoUpItem.list = listUpdateEdit;
       todoUpItem.item = {};
       return { ...state, todo: todoUpItem }
+    
     case 'delete-item':
       const todoUpDelete = state.todo;
       const listUpdate = todoUpDelete.list.filter((item) => {
@@ -171,24 +176,29 @@ function reducer(state, action) {
       });
       todoUpDelete.list = listUpdate;
       return { ...state, todo: todoUpDelete }
+    
     case 'update-list':
       const todoUpList = state.todo;
       todoUpList.list = action.list;
       return { ...state, todo: todoUpList }
+    
     case 'edit-item':
       const todoUpEdit = state.todo;
       todoUpEdit.item = action.item;
       return { ...state, todo: todoUpEdit }
+    
     case 'add-item':
       const todoUp = state.todo.list;
       todoUp.push(action.item);
       return { ...state, todo: {list: todoUp, item: {}} }
+    
     default:
       return state;
   }
 }
 
 const StoreProvider = ({ children }) => {
+  
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return <Store.Provider value={{ state, dispatch }}>
@@ -198,11 +208,12 @@ const StoreProvider = ({ children }) => {
 }
 
 function App() {
-  return <StoreProvider>
-    <h2>Tareas</h2>
-    <Form />
-    <List />
-  </StoreProvider>
-}
+  return(
+    <StoreProvider>
+      <h2>Tareas</h2>
+      <Form />
+      <List />
+    </StoreProvider>
+)}
 
 export default App;
